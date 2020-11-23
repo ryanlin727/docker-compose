@@ -1,25 +1,20 @@
 version: "3"
+
 services:
-
-  proxy:
-    build: ./proxy
-    networks:
-      - frontend
-  app:
-    build: ./app
-    networks:
-      - frontend
-      - backend
-  db:
-    image: postgres
-    networks:
-      - backend
-
+    mysql:
+        image: mysql:5.7
+        networks:
+            - tp-net
+        container_name: tp-mysql
+        command: mysqld -- character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+        ports:
+           - "6666:3306"
+        volumes:
+           - "./mysql-init/account.sql:/docker-entrypoint-initdb.d/account.sql"
 networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
-    driver_opts:
-      foo: "1"
-      bar: "2"
+    tp-net:
+volumes:
+    tp-volume:
